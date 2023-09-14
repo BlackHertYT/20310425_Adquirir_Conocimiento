@@ -1,0 +1,27 @@
+from flask import Flask, request, jsonify
+
+app = Flask(__name__)
+
+# Base de datos de preguntas y respuestas
+database = {
+    "Hola": "¡Hola! ¿En qué puedo ayudarte?",
+    "¿Cómo estás?": "Estoy bien, gracias. ¿Y tú?",
+    "¿De qué te gustaría hablar?": "Puedo hablar sobre muchos temas. ¿Tienes alguna preferencia?",
+}
+
+@app.route("/", methods=["POST"])
+def chat():
+    user_message = request.json["message"]
+
+    # Buscar una respuesta en la base de datos
+    response = database.get(user_message)
+
+    if response:
+        return jsonify({"response": response})
+
+    # Si no se encuentra una respuesta, pedir nueva información
+    else:
+        return jsonify({"response": "Lo siento, no puedo responder a eso. ¿Podrías proporcionar una respuesta adecuada?"})
+
+if __name__ == "__main__":
+    app.run()
